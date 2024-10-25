@@ -347,7 +347,7 @@ export const Positions = ({
         />
       }
       {isPhone ? (
-        isLoadingIndex ? <PositionLoadingComponent/> :
+        (account && isLoadingIndex) ? <PositionLoadingComponent/> :
         <div className='positions-list'>
           {displayPositions.map((position, key: number) => {
             return (
@@ -536,7 +536,7 @@ export const Positions = ({
           })}
         </div>
       ) : (
-        isLoadingIndex ? <PositionLoadingComponent/> :
+        (account && isLoadingIndex) ? <PositionLoadingComponent/> :
         <table className='positions-table'>
           <thead>
             <tr>
