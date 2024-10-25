@@ -337,6 +337,15 @@ export const Positions = ({
   const isShowAllPosition = useMemo(() => settings.minPositionValueUSD === 0, [settings.minPositionValueUSD])
   const [isBatchTransferModalVisible, setBatchTransferModalVisible] = useState<boolean>(false)
   const showSize = tradeType !== TRADE_TYPE.LIQUIDITY
+  const [hasPositionLoaded, setHasPositionLoaded] = useState<boolean | null>(null);
+  useEffect(() => {
+    if (hasPositionLoaded === null && isLoadingIndex) setHasPositionLoaded(false)
+    else if (hasPositionLoaded === false && !isLoadingIndex) setHasPositionLoaded(true)
+  }, [isLoadingIndex, hasPositionLoaded]);
+
+  const isFetchingPosition = useMemo(() => {
+    return !hasPositionLoaded && account && isLoadingIndex 
+  }, [account, isLoadingIndex, hasPositionLoaded]);
   return (
     <div className='positions-box'>
       {isBatchTransferModalVisible &&
@@ -347,7 +356,7 @@ export const Positions = ({
         />
       }
       {isPhone ? (
-        (account && isLoadingIndex) ? <PositionLoadingComponent/> :
+        isFetchingPosition ? <PositionLoadingComponent/> :
         <div className='positions-list'>
           {displayPositions.map((position, key: number) => {
             return (
@@ -536,7 +545,7 @@ export const Positions = ({
           })}
         </div>
       ) : (
-        (account && isLoadingIndex) ? <PositionLoadingComponent/> :
+        isFetchingPosition ? <PositionLoadingComponent/> :
         <table className='positions-table'>
           <thead>
             <tr>
