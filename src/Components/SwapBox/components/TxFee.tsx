@@ -65,7 +65,10 @@ export const TxFee = ({
         <InfoRow>
           <TextGrey>Slippage</TextGrey>
           <SkeletonLoader loading={!!loading}>
-            <span>
+          <Tooltip
+              position='right-bottom'
+              handle={
+                   <span>
               {slippage > settings.slippageTolerance ? (
                 <TextSell>{slippageFormat}%</TextSell>
               ) : slippage > settings.slippageTolerance / 2 ? (
@@ -74,15 +77,24 @@ export const TxFee = ({
                 <Text>{slippageFormat}%</Text>
               )}
             </span>
+              }
+              renderContent={() => (
+                <div>
+                    <TextGrey>Max Slippage:{' '}</TextGrey>
+                    <Text>{settings.slippageTolerance * 100}%</Text>
+                </div>
+              )}
+            />
+          
           </SkeletonLoader>
         </InfoRow>
       )}
-      {!settings.slippageTolerance || (
+      {/* {!settings.slippageTolerance || (
         <InfoRow>
           <TextGrey>Max Slippage</TextGrey>
           <Text>{settings.slippageTolerance * 100}%</Text>
         </InfoRow>
-      )}
+      )} */}
       {(settings.slippageTolerance && String(valueIn) !== '0' && valueInUsdStatus) ? (
         <InfoRow>
           <TextGrey>Min Value Received</TextGrey>
