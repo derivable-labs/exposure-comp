@@ -9,6 +9,7 @@ import { useListTokens } from '../../state/token/hook'
 import { useHelper } from '../../state/config/useHelper'
 import { POOL_IDS } from '../../utils/constant'
 import { BigNumber } from 'ethers'
+import {useConfigs} from '../../state/config/useConfigs'
 
 const FX = 'f(P,x,v,R)=\\{2vx^P<R:vx^P,R-R^2/(4vx^P)\\}'
 const GX = 'g(P,x,v,R)=\\{2vx^{-P}<R:R-vx^{-P},R^2/(4vx^{-P})\\}'
@@ -72,7 +73,6 @@ export const FunctionPlot = (props: any) => {
       mark,
       leverage: P
     } = calcPoolSide(currentPool, POOL_IDS.C, tokens)
-
     const normalize = (as: BigNumber[]): number[] => {
       const ls = as.map(b => b.toString().length)
       const maxL = Math.max(...ls)
@@ -155,7 +155,20 @@ export const FunctionPlot = (props: any) => {
       </Card>
     )
   }
-
+  const {configs} = useConfigs()
+  const priceUnit = useMemo(() => {
+    if (currentPool?.quoteToken &&
+      currentPool?.baseToken &&
+      tokens[currentPool?.quoteToken] &&
+      tokens[currentPool?.baseToken]) {
+      if(configs.stablecoins.includes(currentPool?.quoteToken)) {
+        return '$'
+      } else {
+        return `${tokens[currentPool?.baseToken]?.symbol}/${tokens[currentPool?.quoteToken]?.symbol}`
+      }
+    }
+    return ''
+  },[configs, currentPool,tokens])
   return (
     <React.Fragment>
       <Card className='p-1 plot-chart-box flex flex-col justify-center items-center pb-[80px] pt-[80px] gap-6'>
@@ -252,7 +265,7 @@ export const FunctionPlot = (props: any) => {
             pointSize={20}
             pointOpacity={0.5}
             showLabel
-            label={`${pX(AD, mark)}`}
+            label={`${priceUnit}${pX(AD, mark)}`}
             labelOrientation={Desmos.LabelOrientations.RIGHT}
           />
           <Expression
@@ -262,7 +275,7 @@ export const FunctionPlot = (props: any) => {
             pointSize={20}
             pointOpacity={0.5}
             showLabel
-            label={`${pX(BD, mark)}`}
+            label={`${priceUnit}${pX(BD, mark)}`}
             labelOrientation={Desmos.LabelOrientations.LEFT}
           />
           <Expression
