@@ -136,9 +136,11 @@ export const Positions = ({
       pendingTxData ? Number(pendingTxPool.id) : side
     )
     // check for position with entry
-    if (
-      ((balances?.[token] && !balances?.[token]?.gt(0)) || pendingTxData?.token || positionsWithEntry[token]?.avgPrice) &&
-      positionsWithEntry[token]?.entryPrice !== -1
+    if ((
+      pendingTxData?.token ||
+      positionsWithEntry[token]?.avgPrice
+    )
+      && positionsWithEntry[token]?.entryPrice !== -1
     ) {
       const pool =
         pools[pendingTxData?.token ? pendingTxPool.address : poolAddress]
@@ -338,6 +340,7 @@ export const Positions = ({
   const [isBatchTransferModalVisible, setBatchTransferModalVisible] = useState<boolean>(false)
   const showSize = tradeType !== TRADE_TYPE.LIQUIDITY
   const [hasPositionLoaded, setHasPositionLoaded] = useState<boolean | null>(null);
+
   useEffect(() => {
     if (hasPositionLoaded === null && isLoadingIndex) setHasPositionLoaded(false)
     else if (hasPositionLoaded === false && !isLoadingIndex) setHasPositionLoaded(true)
@@ -346,6 +349,7 @@ export const Positions = ({
   const isFetchingPosition = useMemo(() => {
     return !hasPositionLoaded && account && isLoadingIndex 
   }, [account, isLoadingIndex, hasPositionLoaded]);
+
   return (
     <div className='positions-box'>
       {isBatchTransferModalVisible &&
