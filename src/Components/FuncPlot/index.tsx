@@ -164,20 +164,19 @@ export const FunctionPlot = (props: any) => {
       </Card>
     )
   }
-  const {configs} = useConfigs()
-  const priceUnit = useMemo(() => {
-    if (currentPool?.quoteToken &&
-      currentPool?.baseToken &&
-      tokens[currentPool?.quoteToken] &&
-      tokens[currentPool?.baseToken]) {
-      if(configs.stablecoins.includes(currentPool?.quoteToken)) {
-        return '$'
-      } else {
-        return `${tokens[currentPool?.baseToken]?.symbol}/${tokens[currentPool?.quoteToken]?.symbol}`
-      }
+
+  const { configs } = useConfigs()
+  const dollar = useMemo(() => {
+    if (!currentPool) {
+      return ''
+    }
+    const { quoteToken } = currentPool
+    if(configs.stablecoins.includes(quoteToken)) {
+      return '$'
     }
     return ''
-  },[configs, currentPool,tokens])
+  }, [currentPool])
+
   return (
     <React.Fragment>
       <Card className='p-1 plot-chart-box flex flex-col justify-center items-center pb-[80px] pt-[80px] gap-6'>
@@ -264,7 +263,7 @@ export const FunctionPlot = (props: any) => {
             color='BLACK'
             hidden
             showLabel
-            label={`${pX(X, mark)}`}
+            label={`${dollar}${pX(X, mark)}`}
             labelOrientation={Desmos.LabelOrientations.BELOW}
           />
           <Expression
@@ -274,7 +273,7 @@ export const FunctionPlot = (props: any) => {
             pointSize={20}
             pointOpacity={0.5}
             showLabel
-            label={`${priceUnit}${pX(AD, mark)}`}
+            label={`${dollar}${pX(AD, mark)}`}
             labelOrientation={Desmos.LabelOrientations.RIGHT}
           />
           <Expression
@@ -284,7 +283,7 @@ export const FunctionPlot = (props: any) => {
             pointSize={20}
             pointOpacity={0.5}
             showLabel
-            label={`${priceUnit}${pX(BD, mark)}`}
+            label={`${dollar}${pX(BD, mark)}`}
             labelOrientation={Desmos.LabelOrientations.LEFT}
           />
           <Expression
