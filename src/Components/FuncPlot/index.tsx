@@ -3,7 +3,7 @@ import { Expression, GraphingCalculator } from 'desmos-react'
 import './style.scss'
 import { Card } from '../ui/Card'
 import { useCurrentPool } from '../../state/currentPool/hooks/useCurrentPool'
-import { formatFloat, zerofy, isUSD, IEW, calcPoolSide, div, NUM } from '../../utils/helpers'
+import { formatFloat, zerofy, isUSD, WEI, IEW, calcPoolSide, div, NUM } from '../../utils/helpers'
 import { CandleChartLoader } from '../ChartLoaders'
 import { useListTokens } from '../../state/token/hook'
 import { useHelper } from '../../state/config/useHelper'
@@ -46,7 +46,8 @@ function pX(x: number, mark: number): string {
 
 export const FunctionPlot = (props: any) => {
   const { tokens } = useListTokens()
-  const { currentPool, drA, drB, drC } = useCurrentPool()
+  const cp = useCurrentPool()
+  const { currentPool } = cp
   const { wrapToNativeAddress } = useHelper()
   const calc = React.useRef() as React.MutableRefObject<Desmos.Calculator>
 
@@ -67,12 +68,13 @@ export const FunctionPlot = (props: any) => {
     AD,
     BD
   } = useMemo(() => {
-    const { baseToken, quoteToken, states, MARK } = currentPool ?? {}
+    const { baseToken, quoteToken, states, MARK, TOKEN_R } = currentPool ?? {}
     const {
       exp,
       mark,
       leverage: P
     } = calcPoolSide(currentPool, POOL_IDS.C, tokens)
+
     const normalize = (as: BigNumber[]): number[] => {
       const ls = as.map(b => b.toString().length)
       const maxL = Math.max(...ls)
@@ -81,7 +83,14 @@ export const FunctionPlot = (props: any) => {
       return as.map(a => formatFloat(IEW(a, avgL)))
     }
 
-    const [R, a, b] = normalize([states.R, states.a, states.b])
+    const [R, a, b, drA, drB, drC] = normalize([
+      states.R,
+      states.a,
+      states.b,
+      WEI(cp.drA, tokens[TOKEN_R].decimals),
+      WEI(cp.drB, tokens[TOKEN_R].decimals),
+      WEI(cp.drC, tokens[TOKEN_R].decimals),
+    ])
 
     const x = !states?.spot || !MARK ? 1 : NUM(div(states?.spot, MARK))
     const X = x**exp
@@ -133,7 +142,7 @@ export const FunctionPlot = (props: any) => {
       AD,
       BD
     }
-  }, [currentPool, drA, drB, drC])
+  }, [cp])
 
   React.useEffect(() => {
     if (calc && calc.current) {
