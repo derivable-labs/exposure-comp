@@ -3,7 +3,7 @@ import { useConfigs } from '../../state/config/useConfigs'
 import { useResource } from '../../state/resources/hooks/useResource'
 import DerivablePosition from './DerivablePosition.json'
 import { useWeb3React } from '../../state/customWeb3React/hook'
-import { IEW, WEI, bn, encodeErc1155Address, formatFloat, packId, parseCallStaticError, zerofy } from '../../utils/helpers'
+import { IEW, NUM, WEI, bn, encodeErc1155Address, formatFloat, packId, parseCallStaticError, zerofy } from '../../utils/helpers'
 import { useWalletBalance } from '../../state/wallet/hooks/useBalances'
 import { ButtonClose } from '../ui/Button'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -21,6 +21,7 @@ import { formatWeiToDisplayNumber } from '../../utils/formatBalance'
 import Tooltip from '../Tooltip/Tooltip'
 import { Box } from '../ui/Box'
 import { Position } from '../../utils/type'
+import { MIN_USD } from '../../utils/constant'
 interface IProps {
   visible: boolean
   setVisible: (a: boolean) => void
@@ -111,6 +112,22 @@ export const BatchTransferModal = ({
     }
   }
 
+  const renderFee = () => {
+    if (!nativePrice || !gasPrice || !gasUsed?.gt(0)) {
+      return <Text>&nbsp;</Text>
+    }
+    const fee = gasUsed.mul(gasPrice)
+    const feeUSD = IEW(fee.mul(WEI(nativePrice)), 36)
+    if (NUM(feeUSD) < MIN_USD) {
+      return <Text>{`less than $${MIN_USD}`}</Text>
+    }
+    return <Text>
+      {zerofy(IEW(fee, 18))}
+      <TextGrey> {configs.nativeSymbol ?? 'ETH'} </TextGrey>
+      (${zerofy(feeUSD)})
+    </Text>
+  }
+
   return (
     <Modal
       setVisible={setVisible}
@@ -133,53 +150,35 @@ export const BatchTransferModal = ({
         <InfoRow>
           <TextGrey>Network Fee</TextGrey>
           <SkeletonLoader loading={!!loading}>
-            {!gasUsed || gasUsed?.isZero() ? (
-              <Text>&nbsp;</Text>
-            ) : (
-              <Tooltip
-                position='right-bottom'
-                handle={
+            <Tooltip
+              position='right-bottom'
+              handle={
+                <div>{renderFee()}</div>
+              }
+              renderContent={() => (
+                <div>
                   <div>
-                    {!nativePrice ||
-                  !gasPrice ||
-                  !gasUsed ||
-                  gasUsed?.isZero() ? (
-                        <Text>&nbsp;</Text>
-                      ) : (
-                        <Text>
-                          {zerofy(IEW(gasUsed.mul(gasPrice), 18))}
-                          <TextGrey> {configs.nativeSymbol ?? 'ETH'} </TextGrey>
-                      ($
-                          {zerofy(IEW(gasUsed.mul(gasPrice).mul(WEI(nativePrice)), 36))})
-                        </Text>
-                      )}
+                    <TextGrey>Estimated Gas:&nbsp;</TextGrey>
+                    <Text>{formatWeiToDisplayNumber(gasUsed, 0, 0)}</Text>
                   </div>
-                }
-                renderContent={() => (
                   <div>
-                    <div>
-                      <TextGrey>Estimated Gas:&nbsp;</TextGrey>
-                      <Text>{formatWeiToDisplayNumber(gasUsed, 0, 0)}</Text>
-                    </div>
-                    <div>
-                      <TextGrey>Gas Price:&nbsp;</TextGrey>
-                      <Text>
-                        {(gasPrice).gte(1e6)
-                          ? formatWeiToDisplayNumber(gasPrice.div(1e9), 0, 0) +
-                          ' gwei'
-                          : formatWeiToDisplayNumber(gasPrice, 0, 0) + ' wei'}
-                      </Text>
-                    </div>
-                    <div>
-                      <TextGrey>{configs.nativeSymbol} Price:&nbsp;</TextGrey>
-                      <Text>
-                      ${formatFloat(nativePrice || configs.nativePriceUSD, undefined, 4, true)}
-                      </Text>
-                    </div>
+                    <TextGrey>Gas Price:&nbsp;</TextGrey>
+                    <Text>
+                      {(gasPrice).gte(1e6)
+                        ? formatWeiToDisplayNumber(gasPrice.div(1e9), 0, 0) +
+                        ' gwei'
+                        : formatWeiToDisplayNumber(gasPrice, 0, 0) + ' wei'}
+                    </Text>
                   </div>
-                )}
-              />
-            )}
+                  <div>
+                    <TextGrey>{configs.nativeSymbol} Price:&nbsp;</TextGrey>
+                    <Text>
+                    ${formatFloat(nativePrice || configs.nativePriceUSD, undefined, 4, true)}
+                    </Text>
+                  </div>
+                </div>
+              )}
+            />
           </SkeletonLoader>
         </InfoRow>
       </Box>
