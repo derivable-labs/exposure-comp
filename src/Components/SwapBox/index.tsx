@@ -40,7 +40,8 @@ const Component = ({
   setInputTokenAddress,
   outputTokenAddress,
   setOutputTokenAddress,
-  tokenOutMaturity
+  tokenOutMaturity,
+  setVisibleSettingModal
 }: any) => {
   const { account } = useWeb3React()
   const { configs } = useConfigs()
@@ -307,6 +308,7 @@ const Component = ({
 
       <div className='actions'>
         <ButtonSwap
+          setVisibleSettingModal={setVisibleSettingModal}
           submitFetcherV2={submitFetcherV2}
           payoffRate={payoffRate}
           payloadAmountIn={payloadAmountIn}
