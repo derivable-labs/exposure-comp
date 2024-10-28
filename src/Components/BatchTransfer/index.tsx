@@ -3,7 +3,7 @@ import { useConfigs } from '../../state/config/useConfigs'
 import { useResource } from '../../state/resources/hooks/useResource'
 import DerivablePosition from './DerivablePosition.json'
 import { useWeb3React } from '../../state/customWeb3React/hook'
-import { IEW, WEI, bn, encodeErc1155Address, formatFloat, packId, parseCallStaticError } from '../../utils/helpers'
+import { IEW, WEI, bn, encodeErc1155Address, formatFloat, packId, parseCallStaticError, zerofy } from '../../utils/helpers'
 import { useWalletBalance } from '../../state/wallet/hooks/useBalances'
 import { ButtonClose } from '../ui/Button'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -147,10 +147,10 @@ export const BatchTransferModal = ({
                         <Text>&nbsp;</Text>
                       ) : (
                         <Text>
-                          {IEW(gasUsed.mul(gasPrice), 18, 5)}
+                          {zerofy(IEW(gasUsed.mul(gasPrice), 18))}
                           <TextGrey> {configs.nativeSymbol ?? 'ETH'} </TextGrey>
                       ($
-                          {IEW(gasUsed.mul(gasPrice).mul(WEI(nativePrice)), 36, 2)})
+                          {zerofy(IEW(gasUsed.mul(gasPrice).mul(WEI(nativePrice)), 36))})
                         </Text>
                       )}
                   </div>

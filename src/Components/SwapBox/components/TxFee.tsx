@@ -110,10 +110,10 @@ export const TxFee = ({
                       <Text>&nbsp;</Text>
                     ) : (
                       <Text>
-                        {IEW(gasUsed.mul(gasPrice), 18, 5)}
+                        {zerofy(IEW(gasUsed.mul(gasPrice), 18))}
                         <TextGrey> {configs.nativeSymbol ?? 'ETH'} </TextGrey>
                       ($
-                        {IEW(gasUsed.mul(gasPrice).mul(WEI(nativePrice)), 36, 2)})
+                        {zerofy(IEW(gasUsed.mul(gasPrice).mul(WEI(nativePrice)), 36))})
                       </Text>
                     )}
                 </div>
