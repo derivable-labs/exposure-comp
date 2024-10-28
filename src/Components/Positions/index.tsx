@@ -135,14 +135,11 @@ export const Positions = ({
       pendingTxData ? pendingTxPool.address : poolAddress,
       pendingTxData ? Number(pendingTxPool.id) : side
     )
-    // no balance
-    if (!balances[token]?.gt(0)) return null
-
     // check for position with entry
     if ((
-        pendingTxData?.token ||
-        positionsWithEntry[token]?.avgPrice
-      )
+      pendingTxData?.token ||
+      positionsWithEntry[token]?.avgPrice
+    )
       && positionsWithEntry[token]?.entryPrice !== -1
     ) {
       const pool =
@@ -342,6 +339,17 @@ export const Positions = ({
   const isShowAllPosition = useMemo(() => settings.minPositionValueUSD === 0, [settings.minPositionValueUSD])
   const [isBatchTransferModalVisible, setBatchTransferModalVisible] = useState<boolean>(false)
   const showSize = tradeType !== TRADE_TYPE.LIQUIDITY
+  const [hasPositionLoaded, setHasPositionLoaded] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (hasPositionLoaded === null && isLoadingIndex) setHasPositionLoaded(false)
+    else if (hasPositionLoaded === false && !isLoadingIndex) setHasPositionLoaded(true)
+  }, [isLoadingIndex, hasPositionLoaded]);
+
+  const isFetchingPosition = useMemo(() => {
+    return !hasPositionLoaded && account && isLoadingIndex 
+  }, [account, isLoadingIndex, hasPositionLoaded]);
+
   return (
     <div className='positions-box'>
       {isBatchTransferModalVisible &&
@@ -352,7 +360,7 @@ export const Positions = ({
         />
       }
       {isPhone ? (
-        isLoadingIndex ? <PositionLoadingComponent/> :
+        isFetchingPosition ? <PositionLoadingComponent/> :
         <div className='positions-list'>
           {displayPositions.map((position, key: number) => {
             return (
@@ -375,7 +383,7 @@ export const Positions = ({
                   <InfoRow>
                     <Text>Balance</Text>
                     <Text>
-                      {zerofy(formatFloat(IEW(position.balance ?? bn(0), tokens[position.token].decimals)))}
+                      {zerofy(formatFloat(IEW(position.balance ?? bn(0), tokens[position.token]?.decimals)))}
                     </Text>
                   </InfoRow>
                 )}
@@ -408,7 +416,7 @@ export const Positions = ({
                     >
                       {valueInUsdStatus === VALUE_IN_USD_STATUS.USD
                         ? ` ⇄ ${
-                            tokens[wrapToNativeAddress(position.pool.TOKEN_R)]
+                            tokens[wrapToNativeAddress(position?.pool?.TOKEN_R)]
                               ?.symbol
                           }`
                         : ' ⇄ USD'}
@@ -527,7 +535,7 @@ export const Positions = ({
                       onClick={() => {
                         setClosingPosition(position)
                         setOutputTokenAddress(
-                          wrapToNativeAddress(position.pool.TOKEN_R)
+                          wrapToNativeAddress(position?.pool?.TOKEN_R)
                         )
                         setVisible(true)
                       }}
@@ -541,7 +549,7 @@ export const Positions = ({
           })}
         </div>
       ) : (
-        isLoadingIndex ? <PositionLoadingComponent/> :
+        isFetchingPosition ? <PositionLoadingComponent/> :
         <table className='positions-table'>
           <thead>
             <tr>
@@ -625,7 +633,7 @@ export const Positions = ({
                       balance={
                         !settings.showBalance
                           ? undefined
-                          : zerofy(formatFloat(IEW(position.balance ?? bn(0), tokens[position.token].decimals)))
+                          : zerofy(formatFloat(IEW(position.balance ?? bn(0), tokens[position.token]?.decimals)))
                       }
                     />
                   </td>
@@ -755,7 +763,7 @@ export const Positions = ({
                         onClick={(e) => {
                           setClosingPosition(position)
                           setOutputTokenAddress(
-                            wrapToNativeAddress(position.pool.TOKEN_R)
+                            wrapToNativeAddress(position?.pool?.TOKEN_R)
                           )
                           setVisible(true)
                           e.stopPropagation() // stop the index from being changed

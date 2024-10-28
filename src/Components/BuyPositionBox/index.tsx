@@ -429,11 +429,13 @@ const Component = ({
         leverageKey={leverageKey}
         leverageValue={leverageValue}/>
 
+      {Number(amountIn) > 0 && gasUsed?.gt(0) &&
       <TxFee
         gasUsed={gasUsed}
         payoffRate={payoffRate}
         loading={loading && Number(amountIn) > 0}
       />
+      }
 
       {/* <Box borderColor='default' className='swap-info-box mt-1 mb-1'> */}
       {/*  <InfoRow> */}

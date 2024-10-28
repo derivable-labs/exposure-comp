@@ -243,16 +243,16 @@ export const ButtonSwap = ({
                 updateSwapTxsHandle(
                   account,
                   swapLogs.filter(
-                    (l: any) => l.transactionHash && l.args?.name === 'Swap'
+                    (l: any) => l.transactionHash && (l?.name ?? l.args?.name) === 'Swap'
                   ),
                   swapLogs.filter(
-                    (l: any) => l.transactionHash && l.args?.name === 'Transfer'
+                    (l: any) => l.transactionHash && (l?.name ?? l.args?.name) === 'Transfer'
                   ))
 
                 toast.success('Transaction Confirmed')
                 setTimeout(async () => {
-                    await fetchBalanceAndAllowance(account, true)
                     await initResource(account)
+                    await fetchBalanceAndAllowance(account, true)
                     setLoading(false)
                     updatePendingTxsHandle(account, swapPendingTxs.filter(penTx => penTx.hash !== pendingTxHash))
                 }, 2000)

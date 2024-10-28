@@ -34,14 +34,23 @@ import { TxFee } from './components/TxFee'
 import { useCalculateSwap } from './hooks/useCalculateSwap'
 import { useTokenValue } from './hooks/useTokenValue'
 import './style.scss'
+import {BigNumber} from 'ethers'
 
 const Component = ({
   inputTokenAddress,
   setInputTokenAddress,
   outputTokenAddress,
   setOutputTokenAddress,
-  tokenOutMaturity
-}: any) => {
+  tokenOutMaturity,
+  setVisibleSettingModal
+}: {
+  inputTokenAddress: string
+  outputTokenAddress: string
+  setInputTokenAddress: any
+  setOutputTokenAddress: any
+  tokenOutMaturity: BigNumber
+  setVisibleSettingModal?: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const { account } = useWeb3React()
   const { configs } = useConfigs()
   const { dTokens, allTokens, id, pools, setTradeType, setChartTab } =
@@ -307,6 +316,7 @@ const Component = ({
 
       <div className='actions'>
         <ButtonSwap
+          setVisibleSettingModal={setVisibleSettingModal}
           submitFetcherV2={submitFetcherV2}
           payoffRate={payoffRate}
           payloadAmountIn={payloadAmountIn}

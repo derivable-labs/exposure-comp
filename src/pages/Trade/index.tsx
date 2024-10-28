@@ -281,6 +281,7 @@ export const Trade = ({
                     outputTokenAddress={outputTokenAddress}
                     setOutputTokenAddress={setOutputTokenAddress}
                     tokenOutMaturity={tokenOutMaturity}
+                    setVisibleSettingModal={setVisibleSettingModal}
                   />
                 </ErrorBoundary>
               </Card>

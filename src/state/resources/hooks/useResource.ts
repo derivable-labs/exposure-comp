@@ -41,23 +41,23 @@ export const useResource = () => {
       const playMode = searchParams.has('play')
       const pool = searchParams.get('pool')
 
-      ddlEngine.RESOURCE.getResourceCached(account, playMode).then((data) => {
-        if (data?.tokens?.length === 0) return
-        addNewResource(data, account)
-        updateSwapTxsHandle(account, data.swapLogs, data.transferLogs)
-      })
-      ddlEngine.RESOURCE.getNewResource(account, playMode).then((data) => {
-        if (data?.tokens?.length === 0) return
-        addNewResource(data, account)
-        updateSwapTxsHandle(account, data.swapLogs, data.transferLogs)
-      })
-      ddlEngine.RESOURCE.getWhiteListResource(pool ? [pool] : []).then(
-        (data) => {
+      await Promise.all([
+        ddlEngine.RESOURCE.getResourceCached(account, playMode).then((data) => {
+          if (data?.tokens?.length === 0) return
+          addNewResource(data, account)
+          updateSwapTxsHandle(account, data.swapLogs, data.transferLogs)
+        }),
+        ddlEngine.RESOURCE.getNewResource(account, playMode).then((data) => {
+          if (data?.tokens?.length === 0) return
+          addNewResource(data, account)
+          updateSwapTxsHandle(account, data.swapLogs, data.transferLogs)
+        }),
+        ddlEngine.RESOURCE.getWhiteListResource(pool ? [pool] : []).then((data) => {
           if (data?.tokens?.length === 0) return
           addNewResource(data, account)
           // updateSwapTxsHandle(account, data.swapLogs, data.transferLogs)
-        }
-      )
+        })
+      ])
     }
   }
   const useCalculatePoolGroupsValue = () => {
