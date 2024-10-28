@@ -10,7 +10,7 @@ import { useConfigs } from '../../state/config/useConfigs'
 import { SORT_POOL_BY } from '../../state/setting/type'
 import { ToggleSwitch } from '../ui/ToggleSwitch'
 import { formatPercent } from '../../utils/helpers'
-import { MIN_POSITON_VALUE_USD_TO_DISPLAY } from '../../utils/constant'
+import { MIN_USD } from '../../utils/constant'
 
 const Component = ({
   visible,
@@ -148,7 +148,7 @@ const Component = ({
                       settings.minPositionValueUSD
                     )
                     if (settings.minPositionValueUSD === 0) {
-                      setMinPositionValueUSD(MIN_POSITON_VALUE_USD_TO_DISPLAY)
+                      setMinPositionValueUSD(MIN_USD)
                     } else {
                       setMinPositionValueUSD(0)
                     }

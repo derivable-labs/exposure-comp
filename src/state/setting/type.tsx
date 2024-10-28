@@ -1,4 +1,4 @@
-import { MIN_POSITON_VALUE_USD_TO_DISPLAY } from '../../utils/constant'
+import { MIN_USD } from '../../utils/constant'
 
 function loadJSON(key: string, defaultValue: any): any {
   try {
@@ -44,7 +44,7 @@ export const initialState: settingsState = {
   slippageTolerance: Number(
     localStorage.getItem('slippageTolerance') ?? 1 / 100
   ),
-  minPositionValueUSD: MIN_POSITON_VALUE_USD_TO_DISPLAY,
+  minPositionValueUSD: MIN_USD,
   maxInterestRate: Number(localStorage.getItem('maxInterestRate') ?? 0.1),
   minLiquidityShare: Number(localStorage.getItem('minLiquidityShare') ?? 1),
   maxDeleverageRisk: Number(localStorage.getItem('maxDeleverageRisk') ?? 100),
