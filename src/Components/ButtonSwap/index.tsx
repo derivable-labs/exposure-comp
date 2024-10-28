@@ -251,8 +251,8 @@ export const ButtonSwap = ({
 
                 toast.success('Transaction Confirmed')
                 setTimeout(async () => {
-                    await fetchBalanceAndAllowance(account, true)
                     await initResource(account)
+                    await fetchBalanceAndAllowance(account, true)
                     setLoading(false)
                     updatePendingTxsHandle(account, swapPendingTxs.filter(penTx => penTx.hash !== pendingTxHash))
                 }, 2000)
