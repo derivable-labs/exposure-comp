@@ -34,6 +34,7 @@ import { TxFee } from './components/TxFee'
 import { useCalculateSwap } from './hooks/useCalculateSwap'
 import { useTokenValue } from './hooks/useTokenValue'
 import './style.scss'
+import {BigNumber} from 'ethers'
 
 const Component = ({
   inputTokenAddress,
@@ -42,7 +43,14 @@ const Component = ({
   setOutputTokenAddress,
   tokenOutMaturity,
   setVisibleSettingModal
-}: any) => {
+}: {
+  inputTokenAddress: string
+  outputTokenAddress: string
+  setInputTokenAddress: any
+  setOutputTokenAddress: any
+  tokenOutMaturity: BigNumber
+  setVisibleSettingModal?: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const { account } = useWeb3React()
   const { configs } = useConfigs()
   const { dTokens, allTokens, id, pools, setTradeType, setChartTab } =
