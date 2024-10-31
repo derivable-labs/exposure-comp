@@ -345,9 +345,19 @@ export const Positions = ({
     if (hasPositionLoaded === null && isLoadingIndex) setHasPositionLoaded(false)
     else if (hasPositionLoaded === false && !isLoadingIndex) setHasPositionLoaded(true)
   }, [isLoadingIndex, hasPositionLoaded]);
-
+  useEffect(()=>{
+    console.log('#-----------------------------------')
+    console.log('#pools', Object.keys(pools).length)
+    console.log('#index', Object.keys(poolGroups).length)
+    console.log('#isLoadingIndex', isLoadingIndex)
+    console.log('#balances', Object.keys(balances).length)
+    console.log('#tokens', Object.keys(tokens).length)
+    console.log('#disPos | PosWithEnt', displayPositions.length , Object.keys(positionsWithEntry).length)
+    console.log('#-----------------------------------')
+  },[pools, poolGroups, isLoadingIndex, displayPositions,balances, tokens])
   const isFetchingPosition = useMemo(() => {
     return !hasPositionLoaded && account && isLoadingIndex 
+    return false
   }, [account, isLoadingIndex, hasPositionLoaded]);
 
   return (

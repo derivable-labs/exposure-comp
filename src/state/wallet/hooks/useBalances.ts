@@ -118,6 +118,7 @@ export const useWalletBalance = () => {
 
   const fetchBalanceAndAllowance = async (wallet: string, withNative: boolean = false) => {
     if (!ddlEngine) return
+    console.log('#bnaLogs', ddlEngine.BNA.RESOURCE.bnaLogs)
     const {
       chainId,
       account,
