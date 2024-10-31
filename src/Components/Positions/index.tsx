@@ -347,9 +347,9 @@ export const Positions = ({
   }, [isLoadingIndex, hasPositionLoaded]);
 
   const isFetchingPosition = useMemo(() => {
+    if(displayPositions.length > 0) return false
     return !hasPositionLoaded && account && isLoadingIndex 
-  }, [account, isLoadingIndex, hasPositionLoaded]);
-
+  }, [account, isLoadingIndex, hasPositionLoaded, displayPositions]);
   return (
     <div className='positions-box'>
       {isBatchTransferModalVisible &&
