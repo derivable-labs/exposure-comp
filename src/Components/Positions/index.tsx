@@ -124,6 +124,7 @@ export const Positions = ({
   const { account } = useWeb3React()
   // const [positionsWithEntry, setPositionsWithEntry] = useState<{[key:string]: any}>({})
   const [positions, setPositions] = useState<Position[]>([])
+  const [hasPositionLoaded, setHasPositionLoaded] = useState<boolean | null>(null);
 
   const generatePositionData = (
     poolAddress: string,
@@ -163,8 +164,8 @@ export const Positions = ({
         IEW(balances[token], tokens[token]?.decimals || 18),
         true
       )
-
-      if (Number(valueU) < settings.minPositionValueUSD && !pendingTxData) {
+      // Only use this conditions when positions has been loaded (cause when loading => balance = 0)
+      if (hasPositionLoaded === true && (Number(valueU) < settings.minPositionValueUSD && !pendingTxData)) {
         return null
       }
 
@@ -284,6 +285,7 @@ export const Positions = ({
     }
   }, [
     positionsWithEntry,
+    hasPositionLoaded,
     pools,
     balances,
     tokens,
@@ -339,7 +341,6 @@ export const Positions = ({
   const isShowAllPosition = useMemo(() => settings.minPositionValueUSD === 0, [settings.minPositionValueUSD])
   const [isBatchTransferModalVisible, setBatchTransferModalVisible] = useState<boolean>(false)
   const showSize = tradeType !== TRADE_TYPE.LIQUIDITY
-  const [hasPositionLoaded, setHasPositionLoaded] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (hasPositionLoaded === null && isLoadingIndex) setHasPositionLoaded(false)
