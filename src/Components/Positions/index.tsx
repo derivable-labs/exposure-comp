@@ -167,6 +167,10 @@ export const Positions = ({
       // Only use this conditions when positions has been loaded (cause when loading => balance = 0)
       if (hasPositionLoaded === true && (Number(valueU) < settings.minPositionValueUSD && !pendingTxData)) {
         return null
+      } else {
+        // When position loading, invalid balance will not display
+        if(!balances?.[token] || balances?.[token]?.eq(0))
+          return null
       }
 
       const poolIndex = Object.keys(poolGroups).find(
