@@ -124,7 +124,6 @@ export const Positions = ({
   const { account } = useWeb3React()
   // const [positionsWithEntry, setPositionsWithEntry] = useState<{[key:string]: any}>({})
   const [positions, setPositions] = useState<Position[]>([])
-  const [hasPositionLoaded, setHasPositionLoaded] = useState<boolean | null>(null);
 
   const generatePositionData = (
     poolAddress: string,
@@ -164,11 +163,11 @@ export const Positions = ({
         IEW(balances[token], tokens[token]?.decimals || 18),
         true
       )
-      // Only use this conditions when positions has been loaded (cause when loading => balance = 0)
-      if (hasPositionLoaded === true && (Number(valueU) < settings.minPositionValueUSD && !pendingTxData)) {
+      // Only use this conditions when index has been loaded (cause when loading => balance = 0)
+      if (isLoadingIndex === false && (Number(valueU) < settings.minPositionValueUSD && !pendingTxData)) {
         return null
       } else {
-        // When position loading, invalid balance will not display
+        // When index loading, invalid balance will not display
         if(!balances?.[token] || balances?.[token]?.eq(0))
           return null
       }
@@ -289,7 +288,7 @@ export const Positions = ({
     }
   }, [
     positionsWithEntry,
-    hasPositionLoaded,
+    isLoadingIndex,
     pools,
     balances,
     tokens,
@@ -346,15 +345,10 @@ export const Positions = ({
   const [isBatchTransferModalVisible, setBatchTransferModalVisible] = useState<boolean>(false)
   const showSize = tradeType !== TRADE_TYPE.LIQUIDITY
 
-  useEffect(() => {
-    if (hasPositionLoaded === null && isLoadingIndex) setHasPositionLoaded(false)
-    else if (hasPositionLoaded === false && !isLoadingIndex) setHasPositionLoaded(true)
-  }, [isLoadingIndex, hasPositionLoaded]);
-
   const isFetchingPosition = useMemo(() => {
-    if(displayPositions.length > 0) return false
-    return !hasPositionLoaded && account && isLoadingIndex 
-  }, [account, isLoadingIndex, hasPositionLoaded, displayPositions]);
+    if(displayPositions.length > 0 || Object.keys(positionsWithEntry).length > 0) return false
+    return account && isLoadingIndex 
+  }, [account, isLoadingIndex, displayPositions]);
   return (
     <div className='positions-box'>
       {isBatchTransferModalVisible &&
