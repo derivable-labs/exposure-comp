@@ -117,10 +117,10 @@ export const Trade = ({
   }, [chainId, JSON.stringify(Object.keys(poolGroups || {}))])
 
   const [searchIndexCache, setSearchIndexCache] = useState<{[key:string] : any}>({})
-  const [isLoadingIndex, setIsLoadingIndex] = useState<boolean>(false)
+  const [isLoadingIndex, setIsLoadingIndex] = useState<boolean>(true)
   const [showAllPool, setShowAllPool] = useState<boolean>(false)
   useMemo(() => {
-    if (id && ddlEngine && ddlEngine?.RESOURCE && poolGroups[id]?.baseToken && !isLoadingIndex && !searchIndexCache[poolGroups[id]?.baseToken]) {
+    if (id && ddlEngine && ddlEngine?.RESOURCE && poolGroups[id]?.baseToken && !searchIndexCache[poolGroups[id]?.baseToken]) {
       setShowAllPool(false)
       setIsLoadingIndex(true)
       ddlEngine.RESOURCE.searchIndex(poolGroups[id]?.baseToken).then((res) => {
