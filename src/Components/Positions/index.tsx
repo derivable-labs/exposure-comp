@@ -346,7 +346,7 @@ export const Positions = ({
   const showSize = tradeType !== TRADE_TYPE.LIQUIDITY
 
   const isFetchingPosition = useMemo(() => {
-    if(displayPositions.length > 0 || Object.keys(positionsWithEntry).length > 0) return false
+    if(displayPositions.length > 0) return false
     return account && isLoadingIndex 
   }, [account, isLoadingIndex, displayPositions]);
   return (
