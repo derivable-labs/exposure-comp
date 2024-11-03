@@ -91,6 +91,7 @@ export const Positions = ({
   const { tokens } = useListTokens()
   const { getTokenValue } = useTokenValue({})
   const { wrapToNativeAddress } = useHelper()
+  const {prices} = useTokenPrice()
   const { settings } = useSettings()
   const [valueInUsdStatus, setValueInUsdStatus] = useState<VALUE_IN_USD_STATUS>(
     VALUE_IN_USD_STATUS.USD
@@ -164,7 +165,7 @@ export const Positions = ({
         true
       )
       // Only use this conditions when index has been loaded (cause when loading => balance = 0)
-      if (isLoadingIndex === false && (Number(valueU) < settings.minPositionValueUSD && !pendingTxData)) {
+      if ((isLoadingIndex === false && (Number(valueU) < settings.minPositionValueUSD && !pendingTxData)) || NUM(prices[pool.TOKEN_R] ?? 0) === 0) {
         return null
       } else {
         // When index loading, invalid balance will not display
@@ -290,6 +291,7 @@ export const Positions = ({
     positionsWithEntry,
     isLoadingIndex,
     pools,
+    prices,
     balances,
     tokens,
     settings.minPositionValueUSD
