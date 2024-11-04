@@ -164,13 +164,18 @@ export const Positions = ({
         IEW(balances[token], tokens[token]?.decimals || 18),
         true
       )
-      // Only use this conditions when index has been loaded (cause when loading => balance = 0)
-      if ((isLoadingIndex === false && (Number(valueU) < settings.minPositionValueUSD && !pendingTxData)) || NUM(prices[pool.TOKEN_R] ?? 0) === 0) {
+
+      if (!isLoadingIndex) {
         return null
-      } else {
-        // When index loading, invalid balance will not display
-        if(!balances?.[token] || balances?.[token]?.eq(0))
-          return null
+      }
+      if (!balances?.[token]?.gt(0)) {
+        return null
+      }
+      if (!(prices[pool.TOKEN_R] ?? 0)) {
+        return null
+      }
+      if (Number(valueU) < settings.minPositionValueUSD && !pendingTxData) {
+        return null
       }
 
       const poolIndex = Object.keys(poolGroups).find(
@@ -289,8 +294,8 @@ export const Positions = ({
     }
   }, [
     positionsWithEntry,
-    isLoadingIndex,
     pools,
+    isLoadingIndex,
     prices,
     balances,
     tokens,
