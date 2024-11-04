@@ -91,6 +91,7 @@ export const Positions = ({
   const { tokens } = useListTokens()
   const { getTokenValue } = useTokenValue({})
   const { wrapToNativeAddress } = useHelper()
+  const {prices} = useTokenPrice()
   const { settings } = useSettings()
   const [valueInUsdStatus, setValueInUsdStatus] = useState<VALUE_IN_USD_STATUS>(
     VALUE_IN_USD_STATUS.USD
@@ -164,6 +165,15 @@ export const Positions = ({
         true
       )
 
+      if (!isLoadingIndex) {
+        return null
+      }
+      if (!balances?.[token]?.gt(0)) {
+        return null
+      }
+      if (!(prices[pool.TOKEN_R] ?? 0)) {
+        return null
+      }
       if (Number(valueU) < settings.minPositionValueUSD && !pendingTxData) {
         return null
       }
@@ -285,6 +295,8 @@ export const Positions = ({
   }, [
     positionsWithEntry,
     pools,
+    isLoadingIndex,
+    prices,
     balances,
     tokens,
     settings.minPositionValueUSD
@@ -339,17 +351,11 @@ export const Positions = ({
   const isShowAllPosition = useMemo(() => settings.minPositionValueUSD === 0, [settings.minPositionValueUSD])
   const [isBatchTransferModalVisible, setBatchTransferModalVisible] = useState<boolean>(false)
   const showSize = tradeType !== TRADE_TYPE.LIQUIDITY
-  const [hasPositionLoaded, setHasPositionLoaded] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    if (hasPositionLoaded === null && isLoadingIndex) setHasPositionLoaded(false)
-    else if (hasPositionLoaded === false && !isLoadingIndex) setHasPositionLoaded(true)
-  }, [isLoadingIndex, hasPositionLoaded]);
 
   const isFetchingPosition = useMemo(() => {
-    return !hasPositionLoaded && account && isLoadingIndex 
-  }, [account, isLoadingIndex, hasPositionLoaded]);
-
+    if(displayPositions.length > 0) return false
+    return account && isLoadingIndex 
+  }, [account, isLoadingIndex, displayPositions]);
   return (
     <div className='positions-box'>
       {isBatchTransferModalVisible &&
