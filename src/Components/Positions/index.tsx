@@ -838,7 +838,7 @@ export const EntryPrice = ({
   isPhone?: boolean
   loading?: boolean
 }) => {
-  if (loading) return <SkeletonLoader loading/>
+  if (loading || !position.entryPrice) return <SkeletonLoader loading/>
 
   const { entryPrice, currentPrice } = position
   const priceRate = div(sub(currentPrice, entryPrice), entryPrice)
@@ -1224,7 +1224,7 @@ export const Size = ({
     return <React.Fragment/>
   }
   if (!isPhone) {
-    return <SkeletonLoader loading={status === POSITION_STATUS.OPENING}>
+    return <SkeletonLoader loading={!sizeDisplay || status === POSITION_STATUS.OPENING}>
       {effectiveLeverage < leverage / 2
         ? <TextError>{sizeDisplay}
           <div><TextGrey>({leverage}x)</TextGrey></div>
