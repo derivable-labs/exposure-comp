@@ -165,16 +165,13 @@ export const Positions = ({
         true
       )
 
-      if (!isLoadingIndex) {
-        return null
-      }
       if (!balances?.[token]?.gt(0)) {
         return null
       }
       if (!(prices[pool.TOKEN_R] ?? 0)) {
         return null
       }
-      if (Number(valueU) < settings.minPositionValueUSD && !pendingTxData) {
+      if (!isLoadingIndex && Number(valueU) < settings.minPositionValueUSD && !pendingTxData) {
         return null
       }
 
