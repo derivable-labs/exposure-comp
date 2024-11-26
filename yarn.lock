@@ -1664,9 +1664,9 @@
     bech32 "1.1.4"
     ws "7.4.6"
 
-"@ethersproject/providers@https://gitpkg.now.sh/derivable-labs/ethers.js/packages/providers?v5.3.5.0":
+"@ethersproject/providers@https://gitpkg.now.sh/derion-io/ethers.js/packages/providers?v5.3.5.0":
   version "5.5.2"
-  resolved "https://gitpkg.now.sh/derivable-labs/ethers.js/packages/providers?v5.3.5.0#6ac23afcc2ad3967690d4194157ed62f41a1127e"
+  resolved "https://gitpkg.now.sh/derion-io/ethers.js/packages/providers?v5.3.5.0#6ac23afcc2ad3967690d4194157ed62f41a1127e"
   dependencies:
     "@ethersproject/abstract-provider" "^5.5.0"
     "@ethersproject/abstract-signer" "^5.5.0"
@@ -3675,15 +3675,6 @@ assign-symbols@^1.0.0:
     lodash "^4.17.21"
     node-fetch "2"
 
-"assisted-json-rpc-provider@git+ssh://git@github.com:derivable-labs/AssistedJsonRpcProvider.git#dev":
-  version "1.0.0"
-  resolved "git+ssh://git@github.com:derivable-labs/AssistedJsonRpcProvider.git#1410f1d9a1e733c35d409f4ee79b0ca348f16718"
-  dependencies:
-    async-task-throttle-on-response "^1.0.1"
-    ethers "^5.5.3"
-    lodash "^4.17.21"
-    node-fetch "2"
-
 ast-types-flow@0.0.7, ast-types-flow@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/ast-types-flow/-/ast-types-flow-0.0.7.tgz#f70b735c6bca1a5c9c22d982c3e39e7feba3bdad"
@@ -5517,16 +5508,16 @@ depd@~1.1.2:
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha512-7emPTl6Dpo6JRXOXjLRxck+FlLRX5847cLKEn00PLAgc3g2hTZZgr+e4c2v6QpSmLeFP3n5yUo7ft6avBK/5jQ==
 
-"derivable-engine@git+ssh://git@github.com:derion-io/engine.git#unipos-v3":
+"derivable-engine@git+ssh://git@github.com:derion-io/engine.git#hedge":
   version "1.0.0"
-  resolved "git+ssh://git@github.com:derion-io/engine.git#2572850bb9ae943e3d965bbf9bf11f4ad8b8bd25"
+  resolved "git+ssh://git@github.com:derion-io/engine.git#ac7d4c0ffadf358f584349f9c7a76d0ff2d167e6"
   dependencies:
-    "@ethersproject/providers" "https://gitpkg.now.sh/derivable-labs/ethers.js/packages/providers?v5.3.5.0"
+    "@ethersproject/providers" "https://gitpkg.now.sh/derion-io/ethers.js/packages/providers?v5.3.5.0"
     "@zoltu/ethereum-crypto" "^2.3.0"
     "@zoltu/ethereum-fetch-json-rpc" "^13.1.4"
     "@zoltu/ethereum-types" "^9.0.4"
     "@zoltu/rlp-encoder" "^2.0.6"
-    assisted-json-rpc-provider "git+ssh://git@github.com:derivable-labs/AssistedJsonRpcProvider.git#dev"
+    assisted-json-rpc-provider "git+ssh://git@github.com:derion-io/AssistedJsonRpcProvider.git#dev"
     canonical-weth "^1.4.0"
     dotenv "^16.3.1"
     ethereum-multicall "^2.15.0"
