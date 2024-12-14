@@ -64,6 +64,23 @@ export const AppLayout = (props: any) => {
   }, [chainId])
 
   useEffect(() => {
+    if (chainIdToDisPlay) {
+      switchNetwork(chainIdToDisPlay)
+    }
+  }, [chainIdToDisPlay])
+
+  const switchNetwork = async (chainId: number) => {
+    const chainIdHex = '0x' + chainId.toString(16)
+    //@ts-ignore
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{chainId: chainIdHex}]
+    })
+    //@ts-ignore
+    console.log('Connected to ' + chainId)
+  }
+
+  useEffect(() => {
     if (!!account && !!provider) {
       provider
         .getBalance(account)
