@@ -5,16 +5,18 @@ export const THEME_SUPPORTED = ['light', 'dark']
 export const SELECTED_NETWORK_LOCAL_STORAGE_KEY = 'selected_network'
 
 export const ARBITRUM_NETWORK = 42161
+export const POLYGON_NETWORK = 137
 export const LOCAL_NETWORK = 31337
 export const BSC_NETWORK = 56
 export const BSC_TESTNET_NETWORK = 97
 export const BASE_NETWORK = 8453
 
 export const DEFAULT_CHAIN = ARBITRUM_NETWORK
-export const CHAIN_IDS = [ARBITRUM_NETWORK, BASE_NETWORK, BSC_NETWORK]
+export const CHAIN_IDS = [ARBITRUM_NETWORK, POLYGON_NETWORK, BASE_NETWORK, BSC_NETWORK]
 
 export const CHAINS = {
   [ARBITRUM_NETWORK]: 'Arbitrum',
+  [POLYGON_NETWORK]: 'Polygon',
   [BASE_NETWORK]: 'Base',
   [BSC_NETWORK]: 'Bsc',
 }
@@ -22,6 +24,7 @@ export const CHAINS = {
 export const RPC_URLS: { [chainId: number]: string } = {
   [BSC_NETWORK]: 'https://bsc-dataseed.binance.org/' as string,
   [ARBITRUM_NETWORK]: 'https://arb1.arbitrum.io/rpc' as string,
+  [POLYGON_NETWORK]: 'https://polygon-bor-rpc.publicnode.com' as string,
   [LOCAL_NETWORK]: 'http://localhost:8545/' as string,
   [BSC_TESTNET_NETWORK]: 'https://data-seed-prebsc-1-s1.binance.org:8545/' as string
 }
