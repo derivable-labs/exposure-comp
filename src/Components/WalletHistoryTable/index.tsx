@@ -29,6 +29,9 @@ const Component = ({ swapTxs }: { swapTxs: SwapTxType[] }) => {
     if (address === NATIVE_ADDRESS || address === TOKEN_R) {
       return TextPink
     }
+    if (!address?.includes('-')) {
+      return Text
+    }
     const id = address.split('-')[1]
     if (Number(id) === POOL_IDS.C) {
       return TextBlue
