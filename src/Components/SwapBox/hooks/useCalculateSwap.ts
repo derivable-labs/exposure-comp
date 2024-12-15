@@ -145,6 +145,9 @@ export const useCalculateSwap = ({
         _payloadAmountIn = _payloadAmountIn
           .mul(WEI(1 - redution, 6))
           .div(1000000)
+        if (!_payloadAmountIn?.gt(0)) {
+          return
+        }
         console.log({
           i,
           redution,
