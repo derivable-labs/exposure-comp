@@ -74,7 +74,7 @@ export const ButtonSwap = ({
   const { ddlEngine } = useConfigs()
   const { settings } = useSettings()
   const { chainId } = useWeb3React()
-  const { initResource } = useResource()
+  const { initResource, pools } = useResource()
   const { swapPendingTxs, updatePendingTxsHandle } = useSwapPendingHistory()
   const slippage = 1 - Math.min(1, payoffRate ?? 0)
   const [fetcherData, setFetcherData] = useState<any>()
@@ -218,9 +218,10 @@ export const ButtonSwap = ({
                         amountOutMin,
                         payloadAmountIn,
                         useSweep: !!(
-                          tokenOutMaturity?.gt(0) &&
-                          balances[outputTokenAddress] &&
                           isErc1155Address(outputTokenAddress)
+                          && pools?.[decodeErc1155Address(outputTokenAddress)?.address]?.MATURITY?.gt(0)
+                          && tokenOutMaturity?.gt(0)
+                          && balances[outputTokenAddress]?.gt(0)
                         ),
                         currentBalanceOut: balances[outputTokenAddress]
                       }

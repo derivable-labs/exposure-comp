@@ -2,6 +2,7 @@ import {
   BIG,
   bn,
   isErc1155Address,
+  decodeErc1155Address,
   WEI,
   parseCallStaticError,
   IEW
@@ -13,6 +14,7 @@ import { useConfigs } from '../../../state/config/useConfigs'
 import { useWalletBalance } from '../../../state/wallet/hooks/useBalances'
 import { ZERO_ADDRESS } from '../../../utils/constant'
 import { useDetectPool } from '../../../hooks/useDetectPool'
+import { useResource } from '../../../state/resources/hooks/useResource'
 
 const TIME_TO_REFRESH_FETCHER_DATA = 10000
 const ITERATION = 10
@@ -49,6 +51,7 @@ export const useCalculateSwap = ({
   const { balances, routerAllowances } = useWalletBalance()
   const [fetcherData, setFetcherData] = useState<any>()
   const [submitFetcherV2, setSubmitFetcherV2] = useState<boolean>(false)
+  const { pools } = useResource()
   const currentPool = useDetectPool({ inputTokenAddress, outputTokenAddress })
 
   const refreshFetcherData = useCallback(() => {
@@ -169,9 +172,10 @@ export const useCalculateSwap = ({
             ),
             payloadAmountIn: _payloadAmountIn,
             useSweep: !!(
-            tokenOutMaturity?.gt(0) &&
-            balances[outputTokenAddress] &&
-            isErc1155Address(outputTokenAddress)
+              isErc1155Address(outputTokenAddress)
+              && pools?.[decodeErc1155Address(outputTokenAddress)?.address]?.MATURITY?.gt(0)
+              && tokenOutMaturity?.gt(0)
+              && balances[outputTokenAddress]?.gt(0)
             ),
             currentBalanceOut: balances[outputTokenAddress]
           }
