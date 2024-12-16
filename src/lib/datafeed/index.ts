@@ -383,7 +383,7 @@ const getMarkLabel = (address: string)=> {
   if (address === NATIVE_ADDRESS || !isErc1155Address(address)) {
     return 'C'
   }
-  const id = address.split('-')[1]
+  const id = address?.split('-')?.[1] ?? 0
   if (Number(id) === POOL_IDS.C) {
     return 'P'
   } else if (Number(id) === POOL_IDS.B) {
@@ -396,8 +396,8 @@ const getMarkLabel = (address: string)=> {
 }
 const getMarkLabelContent = (addressIn: string, addressOut:string)  => {
   const isClose = addressOut === NATIVE_ADDRESS || !isErc1155Address(addressOut)  
-  const addressInid = addressIn.split('-')[1]
-  const addressOutid = addressOut.split('-')[1]
+  const addressInid = addressIn?.split('-')?.[1] ?? 0
+  const addressOutid = addressOut?.split('-')?.[1] ?? 0
   if (Number(addressInid) === POOL_IDS.C || Number(addressOutid) === POOL_IDS.C) {
     if(isClose) return {text: 'Remove',arrow: "⇒", isClose}
     else return {text: "Add",arrow: "⇐", isClose}
@@ -411,7 +411,7 @@ const getMarkPosition = (address: string, tokens: { [key: string]: TokenType; })
   if (address === NATIVE_ADDRESS || !isErc1155Address(address)) {
     return tokens[address]?.symbol ?? 'ETH'
   }
-  const id = address.split('-')[1]
+  const id = address?.split('-')?.[1] ?? 0
   if (Number(id) === POOL_IDS.C) {
     return 'Liquidity'
   } else if (Number(id) === POOL_IDS.B) {
@@ -427,7 +427,7 @@ const getMarkColor = (address: string) => {
   if (address === NATIVE_ADDRESS || !isErc1155Address(address)) {
     return 'pink'
   }
-  const id = address.split('-')[1]
+  const id = address?.split('-')?.[1] ?? 0
   if (Number(id) === POOL_IDS.C) {
     return 'blue'
   } else if (Number(id) === POOL_IDS.B) {
